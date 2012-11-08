@@ -10,6 +10,7 @@ alias sudo='sudo '
 alias cpan-uninstall='\perl -MExtUtils::Install -MExtUtils::Installed -e "unshift@ARGV,new ExtUtils::Installed;sub a{\@ARGV};uninstall((eval{a->[0]->packlist(a->[1])}||do{require CPAN;a->[0]->packlist(CPAN::Shell->expandany(a->[1])->distribution->base_id=~m/(.*)-[^-]+$/)})->packlist_file,1,a->[2])"'
 
 export SVN_EDITOR=emacsclient
+export EDITOR=emacsclient
 
 export PGHOME=/usr/local/pgsql
 export PGDATA=/var/lib/pgsql/data

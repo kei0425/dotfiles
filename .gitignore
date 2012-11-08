@@ -1,2 +1,5 @@
 *~
-
+.emacs.d/elpa
+.emacs.d/server/
+.emacs.d/tramp
+.emacs.d/url
