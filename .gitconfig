@@ -1,0 +1,5 @@
+[user]
+	name = kei0425
+	email = kei0425@gmail.com
+[core]
+	excludesfile = /home/okada/.gitignore
