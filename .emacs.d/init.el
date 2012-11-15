@@ -9,13 +9,15 @@
       ((string-match "mingw" system-configuration)        ;; Windows
        (setq os-type 'win)))
 
-;; proxyの設定
-(cond ((eq os-type 'win)
-       (setq url-proxy-services '(("no_proxy" . "nikkei-r\\.co\\.jp")
-                           ("http" . "172.20.32.105:3128"))))
-      (t
-       (setq url-proxy-services '(("no_proxy" . "nikkei-r\\.co\\.jp")
-                           ("http" . "proxy.nikkei-r.co.jp:8080")))))
+;; ホスト名
+(setq hostname (system-name))
+
+;; 個別設定読み込み
+(let
+    ((file-name (concat "~/.emacs.d/"
+                        (car (split-string hostname "\\.")) ".el")))
+     (cond ((file-readable-p file-name)
+            (load file-name))))
 
 ;; C-hでバックスペース
 (global-set-key "\C-h" 'backward-delete-char)
@@ -159,28 +161,6 @@
       ;; ファイルが読めない場合エラーにする
       (message (format nil "ファイル~aが読み込めません" filename))))
     ))
-
-
-;====================================
-;フレーム位置設定(ウィンドウ） 
-;====================================
-(cond ((eq os-type 'win)
-       (setq initial-frame-alist
-             (append
-              '((top . 0)    ; フレームの Y 位置(ピクセル数)
-                (left . 745)    ; フレームの X 位置(ピクセル数)
-                (width . 82)    ; フレーム幅(文字数)
-                (height . 52)   ; フレーム高(文字数)
-                ) initial-frame-alist)))
-      (t
-       (setq initial-frame-alist
-             (append
-              '((top . 30)    ; フレームの Y 位置(ピクセル数)
-                (left . 820)    ; フレームの X 位置(ピクセル数)
-                (width . 82)    ; フレーム幅(文字数)
-                (height . 64)   ; フレーム高(文字数)
-                ) initial-frame-alist))))
-
 
 
 (cond 
@@ -332,51 +312,6 @@
 
 (put 'narrow-to-region 'disabled nil)
 
-;; for DB
-(setq
- sql-user
- "postgres"
- sql-database
- "crosstest3db"
- sql-server
- "test-cross3.nikkei-r.local"
- )
-
-;; 日記ファイルのオープン
-(defun okada-start()
-  (let ((today-string (format-time-string "%Y/%m/%d"))
-	(data-file "~/okada.txt"))
-    (find-file data-file)
-    (beginning-of-buffer)
-    (cond
-     ((looking-at today-string)
-      (when (looking-at "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9] 作業時間 [0-9][0-9]:[0-9][0-9]-[0-9][0-9]:[0-9][0-9]")
-	(end-of-line)
-	(backward-delete-char-untabify 5))
-      )
-     (t
-      (insert today-string)
-      (insert " 作業時間 ")
-      (insert (format-time-string "%H:%M-\n"))))))
-
-(defun okada-end()
-  (let ((data-file "~/okada.txt"))
-    (find-file data-file)
-    (beginning-of-buffer)
-    (when (looking-at "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9] 作業時間 [0-9][0-9]:[0-9][0-9]-")
-      (end-of-line)
-      (insert (format-time-string "%H:%M"))
-      (save-buffer)
-      ))
-  t)
-
-(cond ((eq os-type 'win)
-       t)
-      (t
-       (okada-start)
-       (add-hook 'kill-emacs-query-functions
-                 'okada-end)))
-
 ;;; svnでバックアップを作成しない
 (setq backup-enable-predicate
       (lambda (path)
@@ -384,3 +319,7 @@
              (and (normal-backup-enable-predicate path)
                   (not (string-match "svn-commit\\..*tmp$" path)))))
 
+
+;;; auto-complate
+(require 'auto-complete-config)
+(ac-config-default)
