@@ -352,4 +352,6 @@
     ((file-name (concat "~/.emacs.d/"
                         (car (split-string hostname "\\.")) ".el")))
      (cond ((file-readable-p file-name)
-            (load file-name))))
+            (load file-name))
+           (t (message (concat file-name "‚ª‚ ‚è‚Ü‚¹‚ñ")))
+           ))

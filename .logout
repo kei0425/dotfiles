@@ -1,0 +1,9 @@
+if [ -e autogitlist ]; then
+    for dir in $(cat autogitlist)
+    do
+        cd $dir
+        git add -A
+        git commit -m "commit `hostname`"
+        git push
+    done
+fi
