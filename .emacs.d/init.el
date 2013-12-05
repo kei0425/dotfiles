@@ -12,13 +12,6 @@
 ;; ホスト名
 (setq hostname (system-name))
 
-;; 個別設定読み込み
-(let
-    ((file-name (concat "~/.emacs.d/"
-                        (car (split-string hostname "\\.")) ".el")))
-     (cond ((file-readable-p file-name)
-            (load file-name))))
-
 ;; C-hでバックスペース
 (global-set-key "\C-h" 'backward-delete-char)
 ;; C-xhでヘルプ
@@ -64,8 +57,13 @@
              (cperl-define-key "\C-c\C-x" 'match-paren)
              ))
 
-(setq auto-mode-alist (append '(("\\.\\(pl\\|pm\\|cgi\\|t\\)$" . cperl-mode))
-                              auto-mode-alist))
+(setq auto-mode-alist
+      (append 
+       '(("\\.\\(pl\\|pm\\|cgi\\|t\\)$" . cperl-mode)
+         ("\\.\\(html\\|htm\\|tt\\)$" . html-mode)
+         ("\\.\\(wsf\\)$" . xml-mode)
+         )
+       auto-mode-alist))
 
 
 ;; match-paren
@@ -323,3 +321,35 @@
 ;;; auto-complate
 (require 'auto-complete-config)
 (ac-config-default)
+
+;;; 起動時の画面はいらない
+(setq inhibit-startup-message t)
+
+;;; mmm-mode
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(mmm-add-mode-ext-class nil "\\.wsf" 'xml-js2)
+(mmm-add-classes
+ '((xml-js2
+    :submode javascript-mode
+    :front "<script language=\"JScript\">.*\n"
+    :back "]]></script>")))
+;;; migemo
+;;(load "migemo.el")
+
+;;;; tree-undo
+(when (require 'undo-tree nil t)
+  (global-undo-tree-mode))
+
+;;; popup-kill-ring
+(require 'popup)
+(require 'pos-tip)
+(require 'popup-kill-ring)
+(global-set-key "\M-y" 'popup-kill-ring) ; M-yに割り当ての場合
+
+;; 個別設定読み込み
+(let
+    ((file-name (concat "~/.emacs.d/"
+                        (car (split-string hostname "\\.")) ".el")))
+     (cond ((file-readable-p file-name)
+            (load file-name))))

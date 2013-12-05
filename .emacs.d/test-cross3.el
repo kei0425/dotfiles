@@ -8,9 +8,9 @@
 (setq initial-frame-alist
       (append
        '((top . 30)    ; フレームの Y 位置(ピクセル数)
-         (left . 820)    ; フレームの X 位置(ピクセル数)
+         (left . 1300)    ; フレームの X 位置(ピクセル数)
          (width . 82)    ; フレーム幅(文字数)
-         (height . 64)   ; フレーム高(文字数)
+         (height . 77)   ; フレーム高(文字数)
          ) initial-frame-alist))
 
 ;; for DB
@@ -38,7 +38,9 @@
      (t
       (insert today-string)
       (insert " 作業時間 ")
-      (insert (format-time-string "%H:%M-\n"))))))
+      (insert (format-time-string "%H:%M-\n"))))
+    (save-buffer)
+    ))
 
 (defun okada-end()
   (let ((data-file "~/okada.txt"))
