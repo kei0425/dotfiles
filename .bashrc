@@ -18,6 +18,7 @@ export EDITOR=emacsclient
 export PGHOME=/usr/local/pgsql
 export PGDATA=/var/lib/pgsql/data
 export PGLIB=$PGHOME/lib
-export PATH=$PATH:$HOME/bin:$PGHOME/bin
+export SCALA_HOME=~/bin/scala
+export PATH=$PATH:$HOME/bin:$PGHOME/bin:$SCALA_HOME/bin
 
 export JSTESTDRIVER_HOME=~/bin
